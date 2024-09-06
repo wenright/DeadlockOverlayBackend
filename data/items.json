@@ -1,0 +1,250 @@
+{
+  "orange_items": [
+    {
+      "name": "Active Reload",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/active_reload.png"
+    },
+    {
+      "name": "Alchemical Fire",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/alchemical_fire.png"
+    },
+    {
+      "name": "Basic Magazine",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/basic_magazine.png"
+    },
+    {
+      "name": "Berserker",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/berserker.png"
+    },
+    {
+      "name": "Burst Fire",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/burst_fire.png"
+    },
+    {
+      "name": "Close Quarters",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/close_quarters.png"
+    },
+    {
+      "name": "Crippling Headshot",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/crippling_headshot.png"
+    },
+    {
+      "name": "Escalating Resilience",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/escalating_resilience.png"
+    },
+    {
+      "name": "Fleetfoot",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/fleetfoot.png"
+    },
+    {
+      "name": "Frenzy",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/frenzy.png"
+    },
+    {
+      "name": "Glass Cannon",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/glass_cannon.png"
+    },
+    {
+      "name": "Head Hunter",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/head_hunter.png"
+    },
+    {
+      "name": "Headshot Booster",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/headshot_booster.png"
+    },
+    {
+      "name": "Heroic Aura",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/heroic_aura.png"
+    },
+    {
+      "name": "High Velocity",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/high_velocity.png"
+    },
+    {
+      "name": "Hollow Point",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/hollow_point.png"
+    },
+    {
+      "name": "Hunter's Aura",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/hunters_aura.png"
+    },
+    {
+      "name": "Intesnifying Magazine",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/intensifying_magazine.png"
+    },
+    {
+      "name": "Kinetic Dash",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/kinetic_dash.png"
+    },
+    {
+      "name": "Long Range",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/long_range.png"
+    },
+    {
+      "name": "Lucky Shot",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/lucky_shot.png"
+    },
+    {
+      "name": "Melee Charge",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/melee_charge.png"
+    },
+    {
+      "name": "Monster Rounds",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/monster_rounds.png"
+    },
+    {
+      "name": "Mystic Shot",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/mystic_shot.png"
+    },
+    {
+      "name": "Point Blank",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/point_blank.png"
+    },
+    {
+      "name": "Pristine Emblem",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/pristine_emblem.png"
+    },
+    {
+      "name": "Rapid Rounds",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/rapid_rounds.png"
+    },
+    {
+      "name": "Restorative Shot",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/restorative_shot.png"
+    },
+    {
+      "name": "Ricochet",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/ricochet.png"
+    },
+    {
+      "name": "Sharpshooter",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/sharpshooter.png"
+    },
+    {
+      "name": "Silencer",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/silencer.png"
+    },
+    {
+      "name": "Siphon Bullets",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/siphon_bullets.png"
+    },
+    {
+      "name": "Slowing Bullets",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/slowing_bullets.png"
+    },
+    {
+      "name": "Soul Shredder",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/soul_shredder.png"
+    },
+    {
+      "name": "Spritual Overflow",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/spiritual_overflow.png"
+    },
+    {
+      "name": "Swift Striker",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/swift_striker.png"
+    },
+    {
+      "name": "Tesla Bullets",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/tesla_bullets.png"
+    },
+    {
+      "name": "Titanic Magazine",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/titanic_magazine.png"
+    },
+    {
+      "name": "Toxic Bullets",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/toxic_bullets.png"
+    },
+    {
+      "name": "Vampiric Burst",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/vampiric_burst.png"
+    },
+    {
+      "name": "Warp Stone",
+      "stats": "",
+      "color": "orange",
+      "url": "../data/orange/warp_stone.png"
+    }
+  ]
+}
