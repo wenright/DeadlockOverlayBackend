@@ -1,26 +1,42 @@
-import time
+import cv2
+import numpy as np
+import streamlink
+from PIL import Image
 
 # warm up a stream to get past twitch intro 
 
-def pull_frame(channelName):
-  image_grabber = TwitchImageGrabber(
-    twitch_url="https://www.twitch.tv/" + channelName,
-    quality="1080p60",  # quality of the stream could be ["160p", "360p", "480p", "720p", "720p60", "1080p", "1080p60"]
-    blocking=True,
-    rate=1  # frame per rate (fps)
-  )
+def pull_frame(stream_url):
+  # Get the stream URL using streamlink
+  streams = streamlink.streams(stream_url)
+  if 'best' not in streams:
+    raise Exception("Unable to find the best quality stream.")
+  
+  # Get the best stream URL
+  stream = streams['best']
+  stream_url = stream.url
 
-  frame = image_grabber.grab()
-  # print(imagehash.average_hash(Image.fromarray(frame)) - imagehash.average_hash(twitch_image))
-  # while imagehash.average_hash(Image.fromarray(frame).convert("L")) - imagehash.average_hash(twitch_image) < 70:
-  #     print(imagehash.average_hash(Image.fromarray(frame).convert("L")) - imagehash.average_hash(twitch_image))
-  #     frame = image_grabber.grab()
-  #     # Image.fromarray(frame).convert("L").show()
-  #     # twitch_image.convert("L").show()
-  #     time.sleep(1)
-  for i in range(20):
-      print("grabs")
-      frame = image_grabber.grab()
-  image_grabber.terminate()  # stop the transcoding
+  # Open the video capture using OpenCV
+  cap = cv2.VideoCapture(stream_url)
 
-  return frame
+  # Check if the stream opened successfully
+  if not cap.isOpened():
+    raise Exception("Failed to open stream.")
+
+  resolution = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+
+  # Read a frame from the stream
+  ret, frame = cap.read()
+
+  # Release the video capture object
+  cap.release()
+
+  if ret:
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    converted_image = Image.fromarray(frame_rgb)
+    converted_image.save("../output/full.png")
+
+    return converted_image, resolution
+  else:
+    raise Exception("Failed to capture a frame.")
+

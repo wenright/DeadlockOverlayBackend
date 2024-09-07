@@ -1,13 +1,12 @@
-from twitchrealtimehandler import (TwitchImageGrabber)
-from PIL import Image
+import traceback
 import item_finder
 import stream
 
+try:
+    stream_frame, resolution = stream.pull_frame("https://www.twitch.tv/averagejonas")
 
-stream_frame = stream.pull_frame("mikaels1")
+    item_finder.get_items(stream_frame, resolution)
+except Exception as exception:
+    print(traceback.format_exc())
 
-image = Image.fromarray(stream_frame)
-image.save("../output/full.png")
-
-item_finder.get_items(image)
 
