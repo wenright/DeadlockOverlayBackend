@@ -7,9 +7,9 @@ twitch_image = Image.open("../data/twitch_intro.png")
 # For orange items at 1080p, might need separate ones for each resolution. 
 item_slots_1080p = [
   (30, 990, 60, 1020),
-  (69, 989, 99, 1020),
+  (68, 990, 98, 1020),
   (30, 1028, 60, 1058),
-  (69, 1028, 99, 1058)
+  (68, 1028, 98, 1058)
 ]
 
 def get_items(image, resolution):
@@ -31,11 +31,11 @@ def get_items(image, resolution):
   return items
 
 def match_item(item_image, item_data):
-  item_image_hash = imagehash.average_hash(item_image)
+  item_image_hash = imagehash.phash(item_image)
   min_dist = float("inf")
   min_item_data = None
   for data in item_data:
-    test_image_hash = imagehash.average_hash(Image.open(data["url"]))
+    test_image_hash = imagehash.phash(Image.open(data["url"]))
     dist = item_image_hash - test_image_hash
 
     if __debug__:
@@ -45,10 +45,11 @@ def match_item(item_image, item_data):
       min_dist = dist
       min_item_data = data
 
-  empty_dist = item_image_hash - imagehash.average_hash(Image.open("../data/empty.png"))
-  print("item slot is empty: " + str(empty_dist))
-  if empty_dist < min_dist:
-    pass
+  empty_dist = imagehash.colorhash(item_image) - imagehash.colorhash(Image.open("../data/empty.png"))
+  print("confidence item slot is empty: " + str(empty_dist))
+  if empty_dist == 0:
+    print("Slot is empty. Next most likely item: " + min_item_data["name"])
+    return "Empty"
   else:
     print("Closest: " + min_item_data["name"] + " (" + str(min_dist) + ")")
 
