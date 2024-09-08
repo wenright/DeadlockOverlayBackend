@@ -2,8 +2,6 @@ import imagehash
 from PIL import Image
 import json
 
-twitch_image = Image.open("../data/twitch_intro.png")
-
 # Orange items
 item_slots_1080p = [
   (31, 991, 61, 1021),
