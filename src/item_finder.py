@@ -6,9 +6,9 @@ twitch_image = Image.open("../data/twitch_intro.png")
 
 # For orange items at 1080p, might need separate ones for each resolution. 
 item_slots_1080p = [
-  (30, 990, 60, 1020),
-  (68, 990, 98, 1020),
-  (30, 1028, 60, 1058),
+  (31, 991, 61, 1021),
+  (68, 991, 98, 1021),
+  (31, 1028, 61, 1058),
   (68, 1028, 98, 1058)
 ]
 
