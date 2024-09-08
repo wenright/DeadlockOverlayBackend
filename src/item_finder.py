@@ -4,7 +4,7 @@ import json
 
 twitch_image = Image.open("../data/twitch_intro.png")
 
-# For orange items at 1080p, might need separate ones for each resolution. 
+# Orange items
 item_slots_1080p = [
   (31, 991, 61, 1021),
   (68, 991, 98, 1021),
@@ -19,16 +19,22 @@ def get_items(image, resolution):
     item_data = json.load(json_file)["orange_items"]
     
     for i, slot in enumerate(item_slots_1080p):
-      scaled_crop_coordinates = scale_coordinates(slot, (1920, 1080), resolution)
-      cropped_image = image.crop(scaled_crop_coordinates)
-
-      if __debug__:
-        cropped_image.save("../output/slot" + str(i) + ".png")
+      file_name = "../output/slot" + str(i) + ".png"
+      cropped_image = crop_item(image, resolution, slot, file_name)
 
       matched_item = match_item(cropped_image, item_data)
       items.append(matched_item)
     
   return items
+
+def crop_item(image, resolution, slot, file_name):
+  scaled_crop_coordinates = scale_coordinates(slot, (1920, 1080), resolution)
+  cropped_image = image.crop(scaled_crop_coordinates)
+
+  if __debug__:
+    cropped_image.save(file_name)
+  
+  return cropped_image
 
 def match_item(item_image, item_data):
   item_image_hash = imagehash.phash(item_image)
