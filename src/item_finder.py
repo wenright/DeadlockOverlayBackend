@@ -3,24 +3,51 @@ from PIL import Image
 import os
 
 # Orange items
-item_slots_1080p = [
-  (30, 990, 60, 1020),
-  (68, 990, 98, 1020),
-  (30, 1028, 60, 1058),
-  (68, 1028, 98, 1058)
-]
+item_slots_1080p = {
+  "orange": [
+    (30, 990, 60, 1020),
+    (68, 990, 98, 1020),
+    (30, 1028, 60, 1058),
+    (68, 1028, 98, 1058)
+  ],
+  "green": [
+    (118, 991, 148, 1021),
+    (156, 991, 186, 1021),
+    (118, 1029, 148, 1059),
+    (156, 1029, 186, 1059)
+  ],
+  "purple": [
+    (205, 991, 235, 1021),
+    (243, 991, 273, 1021),
+    (205, 1029, 235, 1059),
+    (243, 1029, 273, 1059)
+  ],
+  "flex": [
+    (292, 991, 322, 1021),
+    (330, 991, 360, 1021),
+    (292, 1029, 322, 1059),
+    (330, 1029, 360, 1059)
+  ]
+}
 
 prefix = "../data/items/"
 
 def get_items(image, resolution):
-  items = []
+  items = {
+    "orange": [],
+    "green": [],
+    "purple": [],
+    "flex": [],
+  }
     
-  for i, slot in enumerate(item_slots_1080p):
-    file_name = "../output/slot" + str(i) + ".png"
-    cropped_image = crop_item(image, resolution, slot, file_name)
+  for color, arr in item_slots_1080p.items():
+    for i, slot in enumerate(arr):
+      print(slot)
+      file_name = "../output/slot-" + color + "-" + str(i) + ".png"
+      cropped_image = crop_item(image, resolution, slot, file_name)
 
-    matched_item = match_item(cropped_image)
-    items.append(matched_item)
+      matched_item = match_item(cropped_image)
+      items[color].append(matched_item)
     
   return items
 
@@ -52,12 +79,13 @@ def match_item(item_image):
       min_dist = dist
       min_item_filename = item_name
 
+  # Check if empty
   print("\n\n")
   empty_dist = imagehash.colorhash(item_image) - imagehash.colorhash(Image.open("../data/empty.png"))
   # print("confidence item slot is empty: " + str(empty_dist))
   if empty_dist == 0:
     print("Slot is empty. Next most likely item: " + min_item_filename)
-    return "Empty"
+    return "empty"
   else:
     print("Closest: " + min_item_filename + " (" + str(min_dist) + ")")
 
