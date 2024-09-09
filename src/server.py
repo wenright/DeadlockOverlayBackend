@@ -14,14 +14,14 @@ r = redis.Redis(
   password=os.environ.get('REDIS_PASSWORD')
 )
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 """
 returns a list of items that the channelName has on screen.
 if the channelName exists in the cache, it will use that (15s TTL). 
 otherwise pull screenshot from stream, detect items, and return that list of items, as well as set the value in redis
 """
-@app.route("/<channelName>", methods=['GET'])
+@application.route("/<channelName>", methods=['GET'])
 def get_items(channelName):
   username_regex = re.compile(r'^[a-zA-Z0-9_]{4,25}$')
   if not username_regex.match(channelName):
@@ -57,3 +57,8 @@ def get_items(channelName):
     response="Failed to retrieve items",
     status=500
   )
+
+if __name__ == "__main__":
+  # TODO disable before deployment
+  application.debug = True
+  application.run()
