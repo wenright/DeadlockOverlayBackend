@@ -5,56 +5,71 @@ from PIL import Image
 default_resolution = (1920, 1080)
 
 class Test(unittest.TestCase):
-  def test_item_finder_simple(self):
-    test_frame = Image.open("../data/testing/test_simple.png")
-    items = item_finder.get_items(test_frame, default_resolution)
+  # def test_item_finder_simple(self):
+  #   test_frame = Image.open("../data/testing/test_simple.png")
+  #   items = item_finder.get_items(test_frame, default_resolution)
 
-    self.assertEqual(items["orange"][0], "headshot_booster")
-    self.assertEqual(items["orange"][1], "warp_stone")
+  #   self.assertEqual(items["orange"][0], "headshot_booster")
+  #   self.assertEqual(items["orange"][1], "warp_stone")
+  #   self.assertEqual(items["orange"][2], "mystic_shot")
+  #   self.assertEqual(items["orange"][3], "basic_magazine")
+
+  #   self.assertEqual(items["green"][0], "bullet_lifesteal")
+  #   self.assertEqual(items["green"][1], "sprint_boots")
+  #   self.assertEqual(items["green"][2], "enduring_spirit")
+  #   self.assertEqual(items["green"][3], "empty")
+
+  #   self.assertEqual(items["purple"][0], "extra_charge")
+  #   self.assertEqual(items["purple"][1], "mystic_reach")
+  #   self.assertEqual(items["purple"][2], "ethereal_shift")
+  #   self.assertEqual(items["purple"][3], "empty")
+
+  #   self.assertEqual(items["flex"][0], "empty")
+  #   self.assertEqual(items["flex"][1], "empty")
+  #   self.assertEqual(items["flex"][2], "empty")
+  #   self.assertEqual(items["flex"][3], "empty")
+
+  def test_item_finder_missing_last(self):
+    test_frame_empty = Image.open("../data/testing/test_missing_last_slot.png")
+    items = item_finder.get_items(test_frame_empty, default_resolution)
+
+    self.assertEqual(items["orange"][0], "high_velocity")
+    self.assertEqual(items["orange"][1], "hollow_point")
     self.assertEqual(items["orange"][2], "mystic_shot")
-    self.assertEqual(items["orange"][3], "basic_magazine")
+    self.assertEqual(items["orange"][3], "empty")
 
-    self.assertEqual(items["green"][0], "bullet_lifesteal")
-    self.assertEqual(items["green"][1], "sprint_boots")
-    self.assertEqual(items["green"][2], "enduring_spirit")
-    self.assertEqual(items["green"][3], "empty")
+    self.assertEqual(items["green"][0], "healing_rite")
+    self.assertEqual(items["green"][1], "enduring_spirit")
+    self.assertEqual(items["green"][2], "extra_stamina")
+    self.assertEqual(items["green"][3], "enchanters_barrier")
 
     self.assertEqual(items["purple"][0], "extra_charge")
-    self.assertEqual(items["purple"][1], "mystic_reach")
-    self.assertEqual(items["purple"][2], "ethereal_shift")
-    self.assertEqual(items["purple"][3], "empty")
+    self.assertEqual(items["purple"][1], "improved_spirit")
+    self.assertEqual(items["purple"][2], "superior_cooldown")
+    self.assertEqual(items["purple"][3], "improved_burst")
 
     self.assertEqual(items["flex"][0], "empty")
     self.assertEqual(items["flex"][1], "empty")
     self.assertEqual(items["flex"][2], "empty")
     self.assertEqual(items["flex"][3], "empty")
 
-  # def test_item_finder_missing_last(self):
-  #   test_frame_empty = Image.open("../data/testing/test_missing_last_slot.png")
-  #   items = item_finder.get_items(test_frame_empty, default_resolution)
-
-  #   self.assertEqual(items[0], "high_velocity")
-  #   self.assertEqual(items[1], "hollow_point")
-  #   self.assertEqual(items[2], "mystic_shot")
-  #   self.assertEqual(items[3], "Empty")
-
   # def test_item_finder_on_cooldown_1(self):
   #   test_frame_empty = Image.open("../data/testing/test_on_cooldown_1.png")
   #   items = item_finder.get_items(test_frame_empty, default_resolution)
 
-  #   self.assertEqual(items[0], "high_velocity")
-  #   self.assertEqual(items[1], "monster_rounds")
-  #   self.assertEqual(items[2], "hollow_point")
-  #   self.assertEqual(items[3], "mystic_shot")
+  #   self.assertEqual(items["orange"][0], "high_velocity")
+  #   self.assertEqual(items["orange"][1], "monster_rounds")
+  #   self.assertEqual(items["orange"][2], "hollow_point")
+  #   self.assertEqual(items["orange"][3], "mystic_shot")
 
   # def test_item_finder_on_cooldown_2(self):
   #   test_frame = Image.open("../data/testing/test_on_cooldown_2.png")
   #   items = item_finder.get_items(test_frame, default_resolution)
 
-  #   self.assertEqual(items[0], "basic_magazine")
-  #   self.assertEqual(items[1], "point_blank")
-  #   self.assertEqual(items[2], "slowing_bullets")
-  #   self.assertEqual(items[3], "fleetfoot")
+  #   self.assertEqual(items["orange"][0], "basic_magazine")
+  #   self.assertEqual(items["orange"][1], "point_blank")
+  #   self.assertEqual(items["orange"][2], "slowing_bullets")
+  #   self.assertEqual(items["orange"][3], "fleetfoot")
 
 if __name__ == '__main__':
   unittest.main()

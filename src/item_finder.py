@@ -42,7 +42,6 @@ def get_items(image, resolution):
     
   for color, arr in item_slots_1080p.items():
     for i, slot in enumerate(arr):
-      print(slot)
       file_name = "../output/slot-" + color + "-" + str(i) + ".png"
       cropped_image = crop_item(image, resolution, slot, file_name)
 
@@ -61,19 +60,20 @@ def crop_item(image, resolution, slot, file_name):
   return cropped_image
 
 def match_item(item_image):
-  item_image_hash = imagehash.dhash(item_image)
+  item_image_hash = imagehash.phash(item_image)
   min_dist = float("inf")
   min_item_filename = ""
 
   item_images = get_all_item_images()
   
   for image_filename in item_images:
-    test_image_hash = imagehash.dhash(Image.open(prefix + image_filename))
+    test_image_hash = imagehash.phash(Image.open(prefix + image_filename))
     dist = item_image_hash - test_image_hash
     item_name = image_filename.replace(".png", "")
 
     if __debug__:
-      print(item_name + ": " + str(dist))
+      if dist <= 20:
+        print(item_name + ": " + str(dist))
 
     if dist < min_dist:
       min_dist = dist
