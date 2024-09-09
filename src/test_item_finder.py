@@ -5,29 +5,29 @@ from PIL import Image
 default_resolution = (1920, 1080)
 
 class Test(unittest.TestCase):
-  # def test_item_finder_simple(self):
-  #   test_frame = Image.open("../data/testing/test_simple.png")
-  #   items = item_finder.get_items(test_frame, default_resolution)
+  def test_item_finder_simple(self):
+    test_frame = Image.open("../data/testing/test_simple.png")
+    items = item_finder.get_items(test_frame, default_resolution)
 
-  #   self.assertEqual(items["orange"][0], "headshot_booster")
-  #   self.assertEqual(items["orange"][1], "warp_stone")
-  #   self.assertEqual(items["orange"][2], "mystic_shot")
-  #   self.assertEqual(items["orange"][3], "basic_magazine")
+    self.assertEqual(items["orange"][0], "headshot_booster")
+    self.assertEqual(items["orange"][1], "warp_stone")
+    self.assertEqual(items["orange"][2], "mystic_shot")
+    self.assertEqual(items["orange"][3], "basic_magazine")
 
-  #   self.assertEqual(items["green"][0], "bullet_lifesteal")
-  #   self.assertEqual(items["green"][1], "sprint_boots")
-  #   self.assertEqual(items["green"][2], "enduring_spirit")
-  #   self.assertEqual(items["green"][3], "empty")
+    self.assertEqual(items["green"][0], "bullet_lifesteal")
+    self.assertEqual(items["green"][1], "sprint_boots")
+    self.assertEqual(items["green"][2], "enduring_spirit")
+    self.assertEqual(items["green"][3], "empty")
 
-  #   self.assertEqual(items["purple"][0], "extra_charge")
-  #   self.assertEqual(items["purple"][1], "mystic_reach")
-  #   self.assertEqual(items["purple"][2], "ethereal_shift")
-  #   self.assertEqual(items["purple"][3], "empty")
+    self.assertEqual(items["purple"][0], "extra_charge")
+    self.assertEqual(items["purple"][1], "mystic_reach")
+    self.assertEqual(items["purple"][2], "ethereal_shift")
+    self.assertEqual(items["purple"][3], "empty")
 
-  #   self.assertEqual(items["flex"][0], "empty")
-  #   self.assertEqual(items["flex"][1], "empty")
-  #   self.assertEqual(items["flex"][2], "empty")
-  #   self.assertEqual(items["flex"][3], "empty")
+    self.assertEqual(items["flex"][0], "empty")
+    self.assertEqual(items["flex"][1], "empty")
+    self.assertEqual(items["flex"][2], "empty")
+    self.assertEqual(items["flex"][3], "empty")
 
   def test_item_finder_missing_last(self):
     test_frame_empty = Image.open("../data/testing/test_missing_last_slot.png")

@@ -60,19 +60,21 @@ def crop_item(image, resolution, slot, file_name):
   return cropped_image
 
 def match_item(item_image):
-  item_image_hash = imagehash.phash(item_image)
+  item_image_dhash = imagehash.dhash(item_image)
+  item_image_phash = imagehash.phash(item_image)
   min_dist = float("inf")
   min_item_filename = ""
 
   item_images = get_all_item_images()
   
   for image_filename in item_images:
-    test_image_hash = imagehash.phash(Image.open(prefix + image_filename))
-    dist = item_image_hash - test_image_hash
+    test_image_dhash = imagehash.dhash(Image.open(prefix + image_filename))
+    test_image_phash = imagehash.phash(Image.open(prefix + image_filename))
+    dist = (item_image_dhash - test_image_dhash) + (item_image_phash - test_image_phash)
     item_name = image_filename.replace(".png", "")
 
     if __debug__:
-      if dist <= 20:
+      if dist <= 35:
         print(item_name + ": " + str(dist))
 
     if dist < min_dist:
