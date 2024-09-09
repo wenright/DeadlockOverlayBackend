@@ -1,27 +1,26 @@
 import imagehash
 from PIL import Image
-import json
+import os
 
 # Orange items
 item_slots_1080p = [
   (30, 990, 60, 1020),
-  (67, 990, 97, 1020),
+  (68, 990, 98, 1020),
   (30, 1028, 60, 1058),
-  (67, 1028, 97, 1058)
+  (68, 1028, 98, 1058)
 ]
+
+prefix = "../data/items/"
 
 def get_items(image, resolution):
   items = []
-
-  with open("../data/items.json") as json_file:
-    item_data = json.load(json_file)["orange_items"]
     
-    for i, slot in enumerate(item_slots_1080p):
-      file_name = "../output/slot" + str(i) + ".png"
-      cropped_image = crop_item(image, resolution, slot, file_name)
+  for i, slot in enumerate(item_slots_1080p):
+    file_name = "../output/slot" + str(i) + ".png"
+    cropped_image = crop_item(image, resolution, slot, file_name)
 
-      matched_item = match_item(cropped_image, item_data)
-      items.append(matched_item)
+    matched_item = match_item(cropped_image)
+    items.append(matched_item)
     
   return items
 
@@ -34,30 +33,37 @@ def crop_item(image, resolution, slot, file_name):
   
   return cropped_image
 
-def match_item(item_image, item_data):
-  item_image_hash = imagehash.phash(item_image)
+def match_item(item_image):
+  item_image_hash = imagehash.dhash(item_image)
   min_dist = float("inf")
-  min_item_data = None
-  for data in item_data:
-    test_image_hash = imagehash.phash(Image.open(data["url"]))
+  min_item_filename = ""
+
+  item_images = get_all_item_images()
+  
+  for image_filename in item_images:
+    test_image_hash = imagehash.dhash(Image.open(prefix + image_filename))
     dist = item_image_hash - test_image_hash
+    item_name = image_filename.replace(".png", "")
 
     if __debug__:
-      print(str(data["url"]) + ": " + str(dist))
+      print(item_name + ": " + str(dist))
 
     if dist < min_dist:
       min_dist = dist
-      min_item_data = data
+      min_item_filename = item_name
 
+  print("\n\n")
   empty_dist = imagehash.colorhash(item_image) - imagehash.colorhash(Image.open("../data/empty.png"))
-  print("confidence item slot is empty: " + str(empty_dist))
+  # print("confidence item slot is empty: " + str(empty_dist))
   if empty_dist == 0:
-    print("Slot is empty. Next most likely item: " + min_item_data["name"])
+    print("Slot is empty. Next most likely item: " + min_item_filename)
     return "Empty"
   else:
-    print("Closest: " + min_item_data["name"] + " (" + str(min_dist) + ")")
+    print("Closest: " + min_item_filename + " (" + str(min_dist) + ")")
 
-  return min_item_data["name"]
+  print("\n")
+
+  return min_item_filename
 
 """
 Scale coordinates from an original resolution to a target resolution.
@@ -79,6 +85,12 @@ def scale_coordinates(coords, original_resolution, target_resolution):
   scaled_y2 = int(y2 * (target_height / original_height))
 
   return (scaled_x1, scaled_y1, scaled_x2, scaled_y2)
-
-  return scaled_coords
   
+def get_all_item_images():
+  all_item_images = []
+  
+  for entry in os.scandir(prefix):
+    all_item_images.append(entry.name)
+
+  return all_item_images
+

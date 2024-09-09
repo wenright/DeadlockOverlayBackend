@@ -9,37 +9,37 @@ class Test(unittest.TestCase):
     test_frame = Image.open("../data/testing/test_simple.png")
     items = item_finder.get_items(test_frame, default_resolution)
 
-    self.assertEqual(items[0], "Headshot Booster")
-    self.assertEqual(items[1], "Warp Stone")
-    self.assertEqual(items[2], "Mystic Shot")
-    self.assertEqual(items[3], "Basic Magazine")
+    self.assertEqual(items[0], "headshot_booster")
+    self.assertEqual(items[1], "warp_stone")
+    self.assertEqual(items[2], "mystic_shot")
+    self.assertEqual(items[3], "basic_magazine")
 
   def test_item_finder_missing_last(self):
     test_frame_empty = Image.open("../data/testing/test_missing_last_slot.png")
     items = item_finder.get_items(test_frame_empty, default_resolution)
 
-    self.assertEqual(items[0], "High Velocity")
-    self.assertEqual(items[1], "Hollow Point")
-    self.assertEqual(items[2], "Mystic Shot")
+    self.assertEqual(items[0], "high_velocity")
+    self.assertEqual(items[1], "hollow_point")
+    self.assertEqual(items[2], "mystic_shot")
     self.assertEqual(items[3], "Empty")
 
-  def test_item_finder_on_cooldown(self):
+  def test_item_finder_on_cooldown_1(self):
     test_frame_empty = Image.open("../data/testing/test_on_cooldown_1.png")
     items = item_finder.get_items(test_frame_empty, default_resolution)
 
-    self.assertEqual(items[0], "High Velocity")
-    self.assertEqual(items[1], "Monster Rounds")
-    self.assertEqual(items[2], "Hollow Point")
-    self.assertEqual(items[3], "Mystic Shot")
+    self.assertEqual(items[0], "high_velocity")
+    self.assertEqual(items[1], "monster_rounds")
+    self.assertEqual(items[2], "hollow_point")
+    self.assertEqual(items[3], "mystic_shot")
 
-  def test_item_finder_simple(self):
+  def test_item_finder_on_cooldown_2(self):
     test_frame = Image.open("../data/testing/test_on_cooldown_2.png")
     items = item_finder.get_items(test_frame, default_resolution)
 
-    self.assertEqual(items[0], "Basic Magazine")
-    self.assertEqual(items[1], "Point Blank")
-    self.assertEqual(items[2], "Slowing Bullets")
-    self.assertEqual(items[3], "Fleetfoot")
+    self.assertEqual(items[0], "basic_magazine")
+    self.assertEqual(items[1], "point_blank")
+    self.assertEqual(items[2], "slowing_bullets")
+    self.assertEqual(items[3], "fleetfoot")
 
 if __name__ == '__main__':
   unittest.main()
