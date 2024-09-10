@@ -2,19 +2,18 @@ import imagehash
 from PIL import Image
 import os
 
-# Orange items
 item_slots_1080p = {
   "orange": [
-    (30, 990, 60, 1020),
-    (68, 990, 98, 1020),
-    (30, 1028, 60, 1058),
-    (68, 1028, 98, 1058)
+    (30, 991, 60, 1021),
+    (68, 991, 98, 1021),
+    (30, 1029, 60, 1059),
+    (68, 1029, 98, 1059)
   ],
   "green": [
-    (117, 990, 147, 1020),
-    (155, 990, 185, 1020),
-    (117, 1028, 147, 1058),
-    (155, 1028, 185, 1058)
+    (117, 991, 147, 1021),
+    (155, 991, 185, 1021),
+    (117, 1029, 147, 1059),
+    (155, 1029, 185, 1059)
   ],
   "purple": [
     (205, 991, 235, 1021),
@@ -30,6 +29,15 @@ item_slots_1080p = {
   ]
 }
 
+# Attempt hashing at slightly different pixel values, and pull the best match
+buffers = [
+  (1, 0),
+  (0, 0),
+  (-1, 1),
+  (-2, 0),
+  (-1, -1),
+]
+
 prefix = "../data/items/"
 
 def get_items(image, resolution):
@@ -42,13 +50,23 @@ def get_items(image, resolution):
     
   for color, arr in item_slots_1080p.items():
     for i, slot in enumerate(arr):
-      file_name = "../output/slot-" + color + "-" + str(i) + ".png"
-      cropped_image = crop_item(image, resolution, slot, file_name)
+      min_delta = float("inf")
+      min_item = "empty"
+      for buffer in buffers:
+        file_name = "../output/slot-" + color + "-" + str(i) + ".png"
 
-      print("\n-- " + color + " slot " + str(i) + " --")
-      matched_item = match_item(cropped_image)
-      items[color].append(matched_item)
-      print("--------------------")
+        buffered_slot = (slot[0] + buffer[0], slot[1] + buffer[1], slot[2] + buffer[0], slot[3] + buffer[1])
+        cropped_image = crop_item(image, resolution, buffered_slot, file_name)
+
+        print("\n-- " + color + " " + str(i) + " --")
+        matched_item, delta = match_item(cropped_image)
+
+        if delta < min_delta:
+          min_delta = delta
+          min_item = matched_item
+        print("--------------------")
+
+      items[color].append(min_item)
     
   return items
 
@@ -64,6 +82,7 @@ def crop_item(image, resolution, slot, file_name):
 def match_item(item_image):
   item_image_dhash = imagehash.dhash(item_image)
   item_image_phash = imagehash.phash(item_image)
+  item_image_colorhash = imagehash.colorhash(item_image)
   min_dist = float("inf")
   min_item_filename = ""
 
@@ -72,12 +91,14 @@ def match_item(item_image):
   for image_filename in item_images:
     test_image_dhash = imagehash.dhash(Image.open(prefix + image_filename))
     test_image_phash = imagehash.phash(Image.open(prefix + image_filename))
+    test_image_colorhash = imagehash.colorhash(Image.open(prefix + image_filename))
     dist = (item_image_dhash - test_image_dhash) + (item_image_phash - test_image_phash)
+    dist += (item_image_colorhash - test_image_colorhash) * 4
     item_name = image_filename.replace(".png", "")
 
     if __debug__:
-      if dist <= 35:
-        print(item_name + ": " + str(dist))
+      if dist <= 60:
+        print(item_name + ": " + str(item_image_dhash - test_image_dhash) + ", " + str(item_image_phash - test_image_phash) + ", " + str((item_image_colorhash - test_image_colorhash) * 4) + " = " + str(dist))
 
     if dist < min_dist:
       min_dist = dist
@@ -86,15 +107,15 @@ def match_item(item_image):
   # Check if empty
   empty_dist = imagehash.colorhash(item_image) - imagehash.colorhash(Image.open("../data/empty.png"))
   print("confidence item slot is empty: " + str(empty_dist))
-  if empty_dist <= 3 or min_dist >= 45:
+  if empty_dist <= 3 or min_dist >= 95:
     print("Slot is empty. Next most likely item: " + min_item_filename)
-    return "empty"
+    return "empty", float("inf")
   else:
     print("Closest: " + min_item_filename + " (" + str(min_dist) + ")")
 
   print("\n")
 
-  return min_item_filename
+  return min_item_filename, min_dist
 
 """
 Scale coordinates from an original resolution to a target resolution.
