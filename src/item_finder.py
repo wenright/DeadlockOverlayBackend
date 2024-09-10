@@ -11,10 +11,10 @@ item_slots_1080p = {
     (68, 1028, 98, 1058)
   ],
   "green": [
-    (118, 991, 148, 1021),
-    (156, 991, 186, 1021),
-    (118, 1029, 148, 1059),
-    (156, 1029, 186, 1059)
+    (117, 990, 147, 1020),
+    (155, 990, 185, 1020),
+    (117, 1028, 147, 1058),
+    (155, 1028, 185, 1058)
   ],
   "purple": [
     (205, 991, 235, 1021),
@@ -45,8 +45,10 @@ def get_items(image, resolution):
       file_name = "../output/slot-" + color + "-" + str(i) + ".png"
       cropped_image = crop_item(image, resolution, slot, file_name)
 
+      print("\n-- " + color + " slot " + str(i) + " --")
       matched_item = match_item(cropped_image)
       items[color].append(matched_item)
+      print("--------------------")
     
   return items
 
@@ -82,10 +84,9 @@ def match_item(item_image):
       min_item_filename = item_name
 
   # Check if empty
-  print("\n\n")
   empty_dist = imagehash.colorhash(item_image) - imagehash.colorhash(Image.open("../data/empty.png"))
-  # print("confidence item slot is empty: " + str(empty_dist))
-  if empty_dist == 0:
+  print("confidence item slot is empty: " + str(empty_dist))
+  if empty_dist <= 3 or min_dist >= 45:
     print("Slot is empty. Next most likely item: " + min_item_filename)
     return "empty"
   else:
