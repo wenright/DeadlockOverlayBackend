@@ -31,14 +31,14 @@ item_slots_1080p = {
 
 # Attempt hashing at slightly different pixel values, and pull the best match
 buffers = [
-  (1, 0),
+  # (1, 0),
   (0, 0),
-  (-1, 1),
-  (-2, 0),
-  (-1, -1),
+  # (-1, 1),
+  # (-2, 0),
+  # (-1, -1),
 ]
 
-prefix = "../data/items/"
+prefix = "../data/clean_items/"
 
 def get_items(image, resolution):
   items = {
@@ -58,13 +58,13 @@ def get_items(image, resolution):
         buffered_slot = (slot[0] + buffer[0], slot[1] + buffer[1], slot[2] + buffer[0], slot[3] + buffer[1])
         cropped_image = crop_item(image, resolution, buffered_slot, file_name)
 
-        print("\n-- " + color + " " + str(i) + " --")
+        # print("\n-- " + color + " " + str(i) + " --")
         matched_item, delta = match_item(cropped_image)
 
         if delta < min_delta:
           min_delta = delta
           min_item = matched_item
-        print("--------------------")
+        # print("--------------------")
 
       items[color].append(min_item)
     
@@ -96,9 +96,9 @@ def match_item(item_image):
     dist += (item_image_colorhash - test_image_colorhash) * 4
     item_name = image_filename.replace(".png", "")
 
-    if __debug__:
-      if dist <= 60:
-        print(item_name + ": " + str(item_image_dhash - test_image_dhash) + ", " + str(item_image_phash - test_image_phash) + ", " + str((item_image_colorhash - test_image_colorhash) * 4) + " = " + str(dist))
+    # if __debug__:
+    #   if dist <= 60:
+    #     print(item_name + ": " + str(item_image_dhash - test_image_dhash) + ", " + str(item_image_phash - test_image_phash) + ", " + str((item_image_colorhash - test_image_colorhash) * 4) + " = " + str(dist))
 
     if dist < min_dist:
       min_dist = dist
@@ -106,14 +106,15 @@ def match_item(item_image):
 
   # Check if empty
   empty_dist = imagehash.colorhash(item_image) - imagehash.colorhash(Image.open("../data/empty.png"))
-  print("confidence item slot is empty: " + str(empty_dist))
-  if empty_dist <= 3 or min_dist >= 95:
-    print("Slot is empty. Next most likely item: " + min_item_filename)
+  # print("confidence item slot is empty: " + str(empty_dist))
+  if empty_dist <= 3 or min_dist >= 50:
+    # print("Slot is empty. Next most likely item: " + min_item_filename)
     return "empty", float("inf")
   else:
-    print("Closest: " + min_item_filename + " (" + str(min_dist) + ")")
+    # print("Closest: " + min_item_filename + " (" + str(min_dist) + ")")
+    pass
 
-  print("\n")
+  # print("\n")
 
   return min_item_filename, min_dist
 
