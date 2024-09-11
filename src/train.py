@@ -13,7 +13,7 @@ data_dir = pathlib.Path("../data/real_items").with_suffix("")
 
 print("Number of images in data set: " + str(len(list(data_dir.glob("*/*.png")))))
 
-batch_size = 8
+batch_size = 16
 img_width = 30
 img_height = 30
 
@@ -35,29 +35,32 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
 
 class_names = train_ds.class_names
 
-train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=tf.data.AUTOTUNE)
-val_ds = val_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
-
-normalization_layer = layers.Rescaling(1./255)
+train_ds = (train_ds
+            .cache()
+            .shuffle(1000)
+            .prefetch(buffer_size=tf.data.AUTOTUNE))
+val_ds = (val_ds
+          .cache()
+          .prefetch(buffer_size=tf.data.AUTOTUNE))
 
 num_classes = len(class_names)
 
 model = Sequential([
   layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
   # First Convolutional Block
-  layers.Conv2D(32, (3, 3), activation='relu'),
+  layers.Conv2D(16, (3, 3), activation='relu'),
   layers.BatchNormalization(),
   layers.MaxPooling2D((2, 2)),
   layers.Dropout(0.25),
 
   # Second Convolutional Block
-  layers.Conv2D(64, (3, 3), activation='relu'),
+  layers.Conv2D(32, (3, 3), activation='relu'),
   layers.BatchNormalization(),
   layers.MaxPooling2D((2, 2)),
   layers.Dropout(0.25),
 
   # Third Convolutional Block
-  layers.Conv2D(128, (3, 3), activation='relu'),
+  layers.Conv2D(64, (3, 3), activation='relu'),
   layers.BatchNormalization(),
   layers.MaxPooling2D((2, 2)),
   layers.Dropout(0.25),
@@ -67,7 +70,7 @@ model = Sequential([
   
   # Fully Connected Layers
   layers.Dense(256, activation='relu'),
-  layers.Dropout(0.25),
+  layers.Dropout(0.5),
   layers.Dense(num_classes)
 ])
 
@@ -78,11 +81,12 @@ model.compile(optimizer='adam',
 model.summary()
 
 # Train
-epochs=50
+epochs=25
 history = model.fit(
   train_ds,
   validation_data=val_ds,
-  epochs=epochs
+  epochs=epochs,
+  verbose=1
 )
 
 # Model results summary
@@ -107,3 +111,4 @@ plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
+
