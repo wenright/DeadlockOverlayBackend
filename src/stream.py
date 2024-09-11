@@ -2,12 +2,19 @@ import cv2
 import numpy as np
 import streamlink
 from PIL import Image
+import os
 
-# warm up a stream to get past twitch intro 
+session = streamlink.Streamlink()
+session.set_option("twitch-disable-ads", True)
+
+if os.environ.get('TWITCH_AUTH'):
+  session.set_option("http-headers", {
+    "Authorization": f"OAuth {os.environ.get('TWITCH_AUTH')}"
+  })
 
 def pull_frame(stream_url):
   # Get the stream URL using streamlink
-  streams = streamlink.streams(stream_url)
+  streams = session.streams(stream_url)
   if 'best' not in streams:
     raise Exception("Unable to find the best quality stream.")
   
