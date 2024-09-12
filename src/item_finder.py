@@ -1,6 +1,9 @@
 import imagehash
 from PIL import Image
 import os
+import numpy as np
+import tensorflow as tf
+import keras
 
 item_slots_1080p = {
   "orange": [
@@ -29,18 +32,13 @@ item_slots_1080p = {
   ]
 }
 
-# Attempt hashing at slightly different pixel values, and pull the best match
-buffers = [
-  # (1, 0),
-  (0, 0),
-  # (-1, 1),
-  # (-2, 0),
-  # (-1, -1),
-]
-
 prefix = "../data/clean_items/"
 
-def get_items(image, resolution):
+# Load Keras model
+model = keras.models.load_model("../data/models/item_classifier.keras")
+class_names = np.load("../data/models/class_names.npy")
+
+def get_items(image, resolution, use_nn=False):
   items = {
     "orange": [],
     "green": [],
@@ -50,36 +48,40 @@ def get_items(image, resolution):
     
   for color, arr in item_slots_1080p.items():
     for i, slot in enumerate(arr):
-      min_delta = float("inf")
-      min_item = "empty"
-      for buffer in buffers:
-        file_name = "../output/slot-" + color + "-" + str(i) + ".png"
+      file_name = "../output/slot-" + color + "-" + str(i) + ".png"
+      cropped_image = crop_item(image, resolution, slot, file_name)
+      
+      # print("\n-- " + color + " " + str(i) + " --")
+      matched_item = None
+      if use_nn:
+        matched_item = match_item_nn(cropped_image)
+      else:
+        matched_item = match_item_hash(cropped_image)
 
-        buffered_slot = (slot[0] + buffer[0], slot[1] + buffer[1], slot[2] + buffer[0], slot[3] + buffer[1])
-        cropped_image = crop_item(image, resolution, buffered_slot, file_name)
-
-        # print("\n-- " + color + " " + str(i) + " --")
-        matched_item, delta = match_item(cropped_image)
-
-        if delta < min_delta:
-          min_delta = delta
-          min_item = matched_item
-        # print("--------------------")
-
-      items[color].append(min_item)
+      items[color].append(matched_item)
     
   return items
 
-def crop_item(image, resolution, slot, file_name):
+def crop_item(image, resolution, slot, file_name=None):
   scaled_crop_coordinates = scale_coordinates(slot, (1920, 1080), resolution)
-  cropped_image = image.crop(scaled_crop_coordinates)
+  cropped_image = image.crop(scaled_crop_coordinates).resize((30, 30))
 
-  if __debug__:
+  if __debug__ and file_name:
     cropped_image.save(file_name)
   
   return cropped_image
 
-def match_item(item_image):
+def match_item_nn(item_image):
+  img_array = tf.keras.utils.img_to_array(item_image)
+  img_array = tf.expand_dims(img_array, 0) # Create a batch
+  predictions = model.predict(img_array)
+  score = tf.nn.softmax(predictions[0])
+  print(
+    "This image most likely belongs to {} with a {:.2f} percent confidence."
+    .format(class_names[np.argmax(score)], 100 * np.max(score))
+  )
+
+def match_item_hash(item_image):
   item_image_dhash = imagehash.dhash(item_image)
   item_image_phash = imagehash.phash(item_image)
   item_image_colorhash = imagehash.colorhash(item_image)
@@ -109,14 +111,14 @@ def match_item(item_image):
   # print("confidence item slot is empty: " + str(empty_dist))
   if empty_dist <= 3 or min_dist >= 50:
     # print("Slot is empty. Next most likely item: " + min_item_filename)
-    return "empty", float("inf")
+    return "empty"
   else:
     # print("Closest: " + min_item_filename + " (" + str(min_dist) + ")")
     pass
 
   # print("\n")
 
-  return min_item_filename, min_dist
+  return min_item_filename
 
 """
 Scale coordinates from an original resolution to a target resolution.

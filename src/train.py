@@ -89,6 +89,9 @@ history = model.fit(
   verbose=1
 )
 
+model.save("../data/models/item_classifier.keras")
+np.save("../data/models/class_names.npy", np.array(class_names))
+
 # Model results summary
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']

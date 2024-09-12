@@ -1,12 +1,16 @@
 from flask import Flask, Response
 import redis
 import traceback
-import item_finder
-import stream
 import re
 import json
 import os
+import keras
+import tensorflow as tf
 
+import stream
+import item_finder
+
+# Set up Redis
 r = redis.Redis(
   host='redis-15121.c281.us-east-1-2.ec2.redns.redis-cloud.com',
   port=15121,
@@ -40,7 +44,8 @@ def get_items(channelName):
 
   try:
     stream_frame, resolution = stream.pull_frame(f'https://www.twitch.tv/{channelName}')
-    items = item_finder.get_items(stream_frame, resolution)
+
+    items = item_finder.get_items(stream_frame, resolution, use_nn=True)
 
     json_items_string = json.dumps(items)
     r.setex(channelName, 15, json_items_string)
