@@ -51,7 +51,6 @@ def get_items(image, resolution, use_nn=False):
       file_name = "../output/slot-" + color + "-" + str(i) + ".png"
       cropped_image = crop_item(image, resolution, slot, file_name)
       
-      # print("\n-- " + color + " " + str(i) + " --")
       matched_item = None
       if use_nn:
         matched_item = match_item_nn(cropped_image)
@@ -76,10 +75,14 @@ def match_item_nn(item_image):
   img_array = tf.expand_dims(img_array, 0) # Create a batch
   predictions = model.predict(img_array)
   score = tf.nn.softmax(predictions[0])
-  print(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score)], 100 * np.max(score))
-  )
+
+  if __debug__:
+    print(
+      "This item is most likely {} ({:.2f}% confidence)"
+      .format(class_names[np.argmax(score)], 100 * np.max(score))
+    )
+
+  return class_names[np.argmax(score)]
 
 def match_item_hash(item_image):
   item_image_dhash = imagehash.dhash(item_image)

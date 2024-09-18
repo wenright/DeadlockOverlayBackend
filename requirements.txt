@@ -32,3 +32,7 @@ urllib3==2.2.2
 websocket-client==1.8.0
 Werkzeug==2.2.2
 wsproto==1.2.0
+posthog
+Flask-Limiter
+python-dotenv
+flask-cors

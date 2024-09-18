@@ -6,11 +6,16 @@ import json
 import os
 import keras
 import tensorflow as tf
+from posthog import Posthog
+from dotenv import load_dotenv
+from flask_cors import CORS
 
 import stream
 import item_finder
 
-# Set up Redis
+load_dotenv()
+
+# Item caching
 r = redis.Redis(
   host='redis-15121.c281.us-east-1-2.ec2.redns.redis-cloud.com',
   port=15121,
@@ -18,7 +23,14 @@ r = redis.Redis(
   password=os.environ.get('REDIS_PASSWORD')
 )
 
+# Analytics
+posthog = Posthog(
+  os.environ.get('POSTHOG_KEY'), 
+  host='https://us.i.posthog.com'
+)
+
 application = Flask(__name__)
+CORS(application)
 
 """
 returns a list of items that the channelName has on screen.
@@ -27,6 +39,11 @@ otherwise pull screenshot from stream, detect items, and return that list of ite
 """
 @application.route("/<channelName>", methods=['GET'])
 def get_items(channelName):
+  posthog.capture(
+    channelName, 
+    'get_items_api_called'
+  )
+  
   username_regex = re.compile(r'^[a-zA-Z0-9_]{4,25}$')
   if not username_regex.match(channelName):
     return Response(
