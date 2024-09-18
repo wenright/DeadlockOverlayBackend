@@ -10,6 +10,7 @@ from tensorflow.keras.models import Sequential
 
 
 data_dir = pathlib.Path("../data/real_items").with_suffix("")
+model_path = "../data/models/item_classifier.keras"
 
 print("Number of images in data set: " + str(len(list(data_dir.glob("*/*.png")))))
 
@@ -47,28 +48,23 @@ num_classes = len(class_names)
 
 model = Sequential([
   layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
-  # First Convolutional Block
-  layers.Conv2D(16, (3, 3), activation='relu'),
+  layers.Conv2D(16, (3, 3), activation='relu', padding='same'),
   layers.BatchNormalization(),
   layers.MaxPooling2D((2, 2)),
-  layers.Dropout(0.25),
+  # layers.Dropout(0.25),
 
-  # Second Convolutional Block
-  layers.Conv2D(32, (3, 3), activation='relu'),
+  layers.Conv2D(32, (3, 3), activation='relu', padding='same'),
   layers.BatchNormalization(),
   layers.MaxPooling2D((2, 2)),
-  layers.Dropout(0.25),
+  # layers.Dropout(0.25),
 
-  # Third Convolutional Block
-  layers.Conv2D(64, (3, 3), activation='relu'),
+  layers.Conv2D(64, (3, 3), activation='relu', padding='same'),
   layers.BatchNormalization(),
   layers.MaxPooling2D((2, 2)),
-  layers.Dropout(0.25),
+  # layers.Dropout(0.25),
 
-  # Flatten the output of the convolutions for the Dense layers
   layers.Flatten(),
   
-  # Fully Connected Layers
   layers.Dense(256, activation='relu'),
   layers.Dropout(0.5),
   layers.Dense(num_classes)
@@ -89,7 +85,8 @@ history = model.fit(
   verbose=1
 )
 
-model.save("../data/models/item_classifier.keras")
+print('Saving file to ' + model_path)
+model.save(model_path)
 np.save("../data/models/class_names.npy", np.array(class_names))
 
 # Model results summary
