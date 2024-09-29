@@ -10,7 +10,7 @@ f, axarr = plt.subplots(2, 1)
 axarr[0].imshow(Image.open("../data/empty.png"))
 axarr[1].imshow(Image.open("../data/empty.png"))
 
-frame, resolution = pull_frame("https://www.twitch.tv/mattercomm")
+frame, resolution = pull_frame("https://www.twitch.tv/mikaels1")
 
 for color, arr in item_slots_1080p.items():
   for i, slot in enumerate(arr):
