@@ -3,14 +3,17 @@ import numpy as np
 import PIL
 import tensorflow as tf
 import pathlib
+import json
 
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
+import tensorflowjs
 
 
 data_dir = pathlib.Path("data/real_items").with_suffix("")
-model_path = "data/models/item_classifier.keras"
+model_path = "data/models/item_classifier_model"
+class_names_path = "data/models/class_names.json"
 
 print("Number of images in data set: " + str(len(list(data_dir.glob("*/*.png")))))
 
@@ -47,7 +50,8 @@ val_ds = (val_ds
 num_classes = len(class_names)
 
 model = Sequential([
-  layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
+  layers.Input(shape=(img_height, img_width, 3)),
+  layers.Rescaling(1./255),
   layers.Conv2D(16, (3, 3), activation='relu', padding='same'),
   layers.BatchNormalization(),
   layers.MaxPooling2D((2, 2)),
@@ -86,8 +90,9 @@ history = model.fit(
 )
 
 print('Saving file to ' + model_path)
-model.save(model_path)
-np.save("data/models/class_names.npy", np.array(class_names))
+tensorflowjs.converters.save_keras_model(model, model_path)
+with open(class_names_path, 'w', encoding='utf-8') as f:
+    json.dump(class_names, f, ensure_ascii=False, indent=2)
 
 # Model results summary
 acc = history.history['accuracy']
