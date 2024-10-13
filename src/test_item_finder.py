@@ -6,7 +6,7 @@ default_resolution = (1920, 1080)
 
 class Test(unittest.TestCase):
   def test_item_finder_simple(self):
-    test_frame = Image.open("../data/testing/test_simple.png")
+    test_frame = Image.open("data/testing/test_simple.png")
     items = item_finder.get_items(test_frame, default_resolution)
 
     self.assertEqual(items["orange"][0], "headshot_booster")
@@ -30,7 +30,7 @@ class Test(unittest.TestCase):
     self.assertEqual(items["flex"][3], "empty")
 
   def test_item_finder_missing_last(self):
-    test_frame_empty = Image.open("../data/testing/test_missing_last_slot.png")
+    test_frame_empty = Image.open("data/testing/test_missing_last_slot.png")
     items = item_finder.get_items(test_frame_empty, default_resolution)
 
     self.assertEqual(items["orange"][0], "high_velocity")
@@ -54,7 +54,7 @@ class Test(unittest.TestCase):
     self.assertEqual(items["flex"][3], "empty")
 
   def test_item_finder_on_cooldown_1(self):
-    test_frame_empty = Image.open("../data/testing/test_on_cooldown_1.png")
+    test_frame_empty = Image.open("data/testing/test_on_cooldown_1.png")
     items = item_finder.get_items(test_frame_empty, default_resolution)
 
     self.assertEqual(items["orange"][0], "high_velocity")
@@ -78,7 +78,7 @@ class Test(unittest.TestCase):
     self.assertEqual(items["flex"][3], "empty")
 
   def test_item_finder_flex_slots(self):
-    test_frame = Image.open("../data/testing/test_flex_slots.png")
+    test_frame = Image.open("data/testing/test_flex_slots.png")
     items = item_finder.get_items(test_frame, default_resolution, use_nn=True)
 
     self.assertEqual(items["orange"][0], "headshot_booster")

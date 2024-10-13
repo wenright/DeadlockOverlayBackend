@@ -32,11 +32,13 @@ item_slots_1080p = {
   ]
 }
 
-prefix = "../data/clean_items/"
+prefix = "data/clean_items/"
 
 # Load Keras model
-model = keras.models.load_model("../data/models/item_classifier.keras")
-class_names = np.load("../data/models/class_names.npy")
+model = None
+with open('data/models/item_classifier_model/model.json', 'r') as model_json:
+  model = keras.models.model_from_json(model_json.read())
+class_names = np.load("data/models/class_names.npy")
 
 def get_items(image, resolution, use_nn=False):
   items = {
@@ -48,7 +50,7 @@ def get_items(image, resolution, use_nn=False):
     
   for color, arr in item_slots_1080p.items():
     for i, slot in enumerate(arr):
-      file_name = "../output/slot-" + color + "-" + str(i) + ".png"
+      file_name = "output/slot-" + color + "-" + str(i) + ".png"
       cropped_image = crop_item(image, resolution, slot, file_name)
       
       matched_item = None
@@ -110,7 +112,7 @@ def match_item_hash(item_image):
       min_item_filename = item_name
 
   # Check if empty
-  empty_dist = imagehash.colorhash(item_image) - imagehash.colorhash(Image.open("../data/empty.png"))
+  empty_dist = imagehash.colorhash(item_image) - imagehash.colorhash(Image.open("data/empty.png"))
   # print("confidence item slot is empty: " + str(empty_dist))
   if empty_dist <= 3 or min_dist >= 50:
     # print("Slot is empty. Next most likely item: " + min_item_filename)

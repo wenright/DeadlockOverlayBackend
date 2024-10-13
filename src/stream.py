@@ -41,7 +41,7 @@ def pull_frame(stream_url):
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     converted_image = Image.fromarray(frame_rgb)
-    converted_image.save("../output/full.png")
+    converted_image.save("output/full.png")
 
     return converted_image, resolution
   else:
