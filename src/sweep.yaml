@@ -1,0 +1,24 @@
+program: src/sweep.py
+method: random
+metric:
+  name: val_loss
+  goal: minimize
+parameters:
+  epochs:
+    distribution: int_uniform
+    min: 10
+    max: 40
+  architecture:
+    distribution: categorical
+    values:
+      - CNN
+  learning_rate:
+    distribution: uniform
+    min: 0.01
+    max: 0.04
+  dropout:
+    values: [0, 0.25, 0.5]
+  fc_layer_size:
+    values: [64, 128, 256]
+  optimizer_name:
+    values: ['adam', 'SGD']

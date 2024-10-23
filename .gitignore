@@ -164,3 +164,4 @@ cython_debug/
 # Project specific things
 .DS_Store
 output/
+wandb/
