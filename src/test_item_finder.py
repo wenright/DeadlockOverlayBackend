@@ -34,7 +34,7 @@ class Test(unittest.TestCase):
     items = item_finder.get_items(test_frame_empty, default_resolution)
 
     self.assertEqual(items["orange"][0], "high_velocity")
-    self.assertEqual(items["orange"][1], "hollow_point")
+    self.assertEqual(items["orange"][1], "hollow_point_ward")
     self.assertEqual(items["orange"][2], "mystic_shot")
     self.assertEqual(items["orange"][3], "empty")
 
@@ -59,7 +59,7 @@ class Test(unittest.TestCase):
 
     self.assertEqual(items["orange"][0], "high_velocity")
     self.assertEqual(items["orange"][1], "monster_rounds")
-    self.assertEqual(items["orange"][2], "hollow_point")
+    self.assertEqual(items["orange"][2], "hollow_point_ward")
     self.assertEqual(items["orange"][3], "mystic_shot")
 
     self.assertEqual(items["green"][0], "enduring_speed")
