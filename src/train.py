@@ -11,7 +11,7 @@ from tensorflow.keras.models import Sequential
 import tensorflowjs
 
 def train(config, callbacks, saveModel=False):
-  data_dir = pathlib.Path("data/real_items").with_suffix("")
+  data_dir = pathlib.Path("data/training_data").with_suffix("")
   model_path = "data/models/item_classifier_model"
   class_names_path = "data/models/class_names.json"
 
