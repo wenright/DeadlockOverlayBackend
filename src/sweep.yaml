@@ -4,21 +4,25 @@ metric:
   name: val_loss
   goal: minimize
 parameters:
-  epochs:
-    distribution: int_uniform
-    min: 10
-    max: 40
-  architecture:
-    distribution: categorical
-    values:
-      - CNN
   learning_rate:
     distribution: uniform
-    min: 0.01
+    min: 0.03
     max: 0.04
-  dropout:
-    values: [0, 0.25, 0.5]
-  fc_layer_size:
-    values: [64, 128, 256]
   optimizer_name:
     values: ['adam', 'SGD']
+  dense_activation_function:
+    values: ['relu', 'leaky_relu', 'tanh', 'softmax']
+  cnn_activation_function:
+    values: ['relu', 'leaky_relu', 'tanh', 'softmax']
+  pooling_strategy:
+    values: ['average', 'max']
+  filter_sizes:
+    values: [[16, 32], [6, 16], [10, 15]]
+  kernal_size:
+    values: [3, 5]
+  num_dense_layers:
+    values: [1, 2, 3]
+  fc_layer_size:
+    values: [64, 128, 256]
+  dropout:
+    values: [0, 0.25, 0.5]

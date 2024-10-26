@@ -49,33 +49,36 @@ def train(config, callbacks, saveModel=False):
 
   num_classes = len(class_names)
 
-  model = Sequential([
-    layers.Input(shape=(img_height, img_width, 3)),
-    layers.Rescaling(1./255),
-    layers.Conv2D(16, (3, 3), activation='relu', padding='same'),
-    layers.BatchNormalization(),
-    layers.MaxPooling2D((2, 2)),
+  kernal_size = (config['kernal_size'], config['kernal_size'])
 
-    layers.Conv2D(32, (3, 3), activation='relu', padding='same'),
-    layers.BatchNormalization(),
-    layers.MaxPooling2D((2, 2)),
+  architecture = []
+  architecture.append(layers.Input(shape=(img_height, img_width, 3)))
+  architecture.append(layers.Rescaling(1./255))
+  architecture.append(layers.Conv2D(config['filter_sizes'][0], kernal_size, activation=config['cnn_activation_function'], padding='same'))
+  if config['pooling_strategy'] == 'max':
+    architecture.append(layers.BatchNormalization())
+    architecture.append(layers.MaxPooling2D((2, 2)))
+  else:
+    architecture.append(layers.AveragePooling2D())
+  architecture.append(layers.Conv2D(config['filter_sizes'][1], kernal_size, activation=config['cnn_activation_function'], padding='same'))
+  if config['pooling_strategy'] == 'max':
+    architecture.append(layers.BatchNormalization())
+    architecture.append(layers.MaxPooling2D((2, 2)))
+  else:
+    architecture.append(layers.AveragePooling2D())
+  architecture.append(layers.Flatten())
+  for _ in range(config['num_dense_layers']):
+    architecture.append(layers.Dense(config['fc_layer_size'], activation=config['dense_activation_function']))
+  architecture.append(layers.Dropout(config['dropout']))
+  architecture.append(layers.Dense(num_classes, activation='softmax'))
 
-    layers.Conv2D(64, (3, 3), activation='relu', padding='same'),
-    layers.BatchNormalization(),
-    layers.MaxPooling2D((2, 2)),
-
-    layers.Flatten(),
-    
-    layers.Dense(config.fc_layer_size, activation='relu'),
-    layers.Dropout(config.dropout),
-    layers.Dense(num_classes)
-  ])
+  model = Sequential(architecture)
 
   optimizer = None
-  if config.optimizer_name == 'adam':
-    optimizer = tf.keras.optimizers.Adam(learning_rate=config.learning_rate)
+  if config['optimizer_name'] == 'adam':
+    optimizer = tf.keras.optimizers.Adam(learning_rate=config['learning_rate'])
   else:
-    optimizer = tf.keras.optimizers.SGD(learning_rate=config.learning_rate)
+    optimizer = tf.keras.optimizers.SGD(learning_rate=config['learning_rate'])
 
   model.compile(optimizer=optimizer,
                 loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
@@ -87,7 +90,7 @@ def train(config, callbacks, saveModel=False):
   history = model.fit(
     train_ds,
     validation_data=val_ds,
-    epochs=config.epochs,
+    epochs=50,
     verbose=1,
     callbacks=callbacks
   )
@@ -100,9 +103,15 @@ def train(config, callbacks, saveModel=False):
 
 if __name__ == '__main__':
    train({
-    'learning_rate': 0.032,
-    'epochs': 30,
+    'learning_rate': 0.0385,
     'dropout': 0.5,
-    'fc_layer_size': 256,
-    'optimizer_name': 'SGD'
+    'fc_layer_size': 128,
+    'optimizer_name': 'SGD',
+    'cnn_activation_function': 'softmax',
+    'dense_activation_function': 'relu',
+    'num_conv_layers': 2,
+    'filter_sizes': [16, 32],
+    'kernal_size': 3,
+    'num_dense_layers': 1,
+    'pooling_strategy': 'max',
    }, None, True)

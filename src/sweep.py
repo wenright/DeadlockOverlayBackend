@@ -11,8 +11,7 @@ class WandbMetricsLogger(keras.callbacks.Callback):
 
 if __name__ == '__main__':
   wandb.init(
-    # set the wandb project where this run will be logged
-    project="my-awesome-project",
+    project="deadlock-overlay",
   )
 
   train.train(wandb.config, WandbMetricsLogger())
