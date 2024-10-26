@@ -25,7 +25,7 @@ for color, arr in item_slots_1080p.items():
       continue
 
     # Find a filename that's 1 higher than the current highest
-    folder = "data/training_data/" + item_name_fixed + "/"
+    folder = "data/item_training_data/" + item_name_fixed + "/"
 
     if not os.path.exists(folder):
       print("folder doesn't exist, creating " + folder)

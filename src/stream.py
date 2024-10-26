@@ -3,6 +3,9 @@ import numpy as np
 import streamlink
 from PIL import Image
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 session = streamlink.Streamlink()
 session.set_option("twitch-disable-ads", True)
@@ -11,6 +14,8 @@ if os.environ.get('TWITCH_AUTH'):
   session.set_option("http-headers", {
     "Authorization": f"OAuth {os.environ.get('TWITCH_AUTH')}"
   })
+else:
+  print("TWITCH_AUTH not set, you may get blank screens")
 
 def pull_frame(stream_url):
   # Get the stream URL using streamlink

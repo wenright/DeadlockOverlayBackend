@@ -9,9 +9,9 @@ requires python 3.8
 
 
 ## Pulling more icon data
-`python src/item_puller.py`
+`python src/pull_item_training_data.py`
 
-Fetches item screenshots from the stream defined there, then pull up a window with a guess as to what the item is. Just hit enter if it looks right, or type the name if it's wrong. Data will be written to `data/training_data/[item_name]`
+Fetches item screenshots from the stream defined there, then pull up a window with a guess as to what the item is. Just hit enter if it looks right, or type the name if it's wrong. Data will be written to `data/item_training_data/[item_name]`
 
 You may notice that `output/full.png` is not the right stream, but a Twtich preroll instead. The only way I've found to bypass this is by signing up for twitch turbo, then adding your auth token to `src/.env` in the format `TWITCH_AUTH=[your_auth]`. Find out how to get your auth token [here](https://streamlink.github.io/cli/plugins/twitch.html).
 

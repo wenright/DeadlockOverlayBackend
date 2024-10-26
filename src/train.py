@@ -11,7 +11,7 @@ from tensorflow.keras.models import Sequential
 import tensorflowjs
 
 def train(config, callbacks, saveModel=False):
-  data_dir = pathlib.Path("data/training_data").with_suffix("")
+  data_dir = pathlib.Path("data/item_training_data").with_suffix("")
   model_path = "data/models/item_classifier_model"
   class_names_path = "data/models/class_names.json"
 
@@ -114,4 +114,4 @@ if __name__ == '__main__':
     'kernal_size': 3,
     'num_dense_layers': 1,
     'pooling_strategy': 'max',
-   }, None, True)
+   }, None, saveModel=True)
