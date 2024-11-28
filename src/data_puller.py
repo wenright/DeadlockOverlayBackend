@@ -33,7 +33,8 @@ for color, arr in item_slots_1080p.items():
     
     current_max = 0
     for entry in os.scandir(folder):
-      current_max = max(current_max, int(entry.name.replace(".png", "")))
+      if ".png" in entry.name:
+        current_max = max(current_max, int(entry.name.replace(".png", "")))
 
     filename = folder + str(current_max + 1) + ".png"
     print("Saving " + filename)
