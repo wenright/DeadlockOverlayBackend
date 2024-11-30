@@ -90,12 +90,14 @@ def train(config, callbacks, saveModel=False):
   history = model.fit(
     train_ds,
     validation_data=val_ds,
-    epochs=40,
+    epochs=50,
     verbose=1,
     callbacks=callbacks
   )
 
   if saveModel:
+    model.save('model.h5')
+    
     print('Saving file to ' + model_path)
     tensorflowjs.converters.save_keras_model(model, model_path)
     with open(class_names_path, 'w', encoding='utf-8') as f:

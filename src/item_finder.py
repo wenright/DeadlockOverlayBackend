@@ -4,6 +4,7 @@ import os
 import numpy as np
 import tensorflow as tf
 import keras
+import json
 
 item_slots_1080p = {
   "orange": [
@@ -68,24 +69,21 @@ def crop_item(image, resolution, slot, file_name=None):
 
 def match_item_nn(item_image):
   # Load Keras model
-  model = None
-  # TODO this doesn't work for loading a tensorflowjs model
-  with open('data/models/item_classifier_model/model.json', 'r') as model_json:
-    model = keras.models.model_from_json(model_json.read())
-  class_names = np.load("data/models/class_names.npy")
+  model = keras.models.load_model('model.h5')
+  with open("data/models/class_names.json") as f:
+    class_names = json.load(f)
+    img_array = tf.keras.utils.img_to_array(item_image)
+    img_array = tf.expand_dims(img_array, 0) # Create a batch
+    predictions = model.predict(img_array)
+    score = tf.nn.softmax(predictions[0])
 
-  img_array = tf.keras.utils.img_to_array(item_image)
-  img_array = tf.expand_dims(img_array, 0) # Create a batch
-  predictions = model.predict(img_array)
-  score = tf.nn.softmax(predictions[0])
+    if __debug__:
+      print(
+        "This item is most likely {} ({:.2f}% confidence)"
+        .format(class_names[np.argmax(score)], 100 * np.max(score))
+      )
 
-  if __debug__:
-    print(
-      "This item is most likely {} ({:.2f}% confidence)"
-      .format(class_names[np.argmax(score)], 100 * np.max(score))
-    )
-
-  return class_names[np.argmax(score)]
+    return class_names[np.argmax(score)]
 
 def match_item_hash(item_image):
   item_image_dhash = imagehash.dhash(item_image)

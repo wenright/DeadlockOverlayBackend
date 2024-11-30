@@ -3,19 +3,19 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 from stream import pull_frame
-from item_finder import match_item_hash, crop_item, item_slots_1080p
+from item_finder import match_item_nn, crop_item, item_slots_1080p
 
 plt.ion()
 f, axarr = plt.subplots(2, 1)
 axarr[0].imshow(Image.open("data/empty.png"))
 axarr[1].imshow(Image.open("data/empty.png"))
 
-frame, resolution = pull_frame("https://www.twitch.tv/mikaels1")
+frame, resolution = pull_frame("https://www.twitch.tv/averagejonas")
 
 for color, arr in item_slots_1080p.items():
   for i, slot in enumerate(arr):
     item_image = crop_item(frame, resolution, slot, "output/tmp.png")
-    item_name = match_item_hash(item_image)
+    item_name = match_item_nn(item_image)
 
     axarr[0].imshow(item_image)
     axarr[1].imshow(Image.open("data/clean_items/" + item_name + ".png"))
