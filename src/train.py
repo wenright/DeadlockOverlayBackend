@@ -105,14 +105,14 @@ def train(config, callbacks, saveModel=False):
 
 if __name__ == '__main__':
    train({
-    'learning_rate': 0.0385,
+    'learning_rate': 0.03660573315077385,
     'dropout': 0.5,
-    'fc_layer_size': 128,
+    'fc_layer_size': 256,
     'optimizer_name': 'SGD',
     'cnn_activation_function': 'softmax',
     'dense_activation_function': 'relu',
     'num_conv_layers': 2,
-    'filter_sizes': [16, 32],
+    'filter_sizes': [6, 16],
     'kernal_size': 3,
     'num_dense_layers': 1,
     'pooling_strategy': 'max',
