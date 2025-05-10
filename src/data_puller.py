@@ -10,7 +10,7 @@ f, axarr = plt.subplots(2, 1)
 axarr[0].imshow(Image.open("data/empty.png"))
 axarr[1].imshow(Image.open("data/empty.png"))
 
-frame, resolution = pull_frame("https://www.twitch.tv/fargareko")
+frame, resolution = pull_frame("https://www.twitch.tv/mattercomm")
 
 for i, slot in enumerate(item_slots_1080p):
   item_image = crop_item(frame, resolution, slot, "output/tmp.png")
