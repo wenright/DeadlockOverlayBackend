@@ -6,55 +6,39 @@ import tensorflow as tf
 import keras
 import json
 
-item_slots_1080p = {
-  "orange": [
-    [30, 987, 60, 1017],
-    [68, 987, 98, 1017],
-    [30, 1025, 60, 1055],
-    [68, 1025, 98, 1055]
-  ],
-  "green": [
-    [117, 987, 147, 1017],
-    [155, 987, 185, 1017],
-    [117, 1025, 147, 1055],
-    [155, 1025, 185, 1055]
-  ],
-  "purple": [
-    [205, 987, 235, 1017],
-    [243, 987, 273, 1017],
-    [205, 1025, 235, 1055],
-    [243, 1025, 273, 1055]
-  ],
-  "flex": [
-    [292, 987, 322, 1017],
-    [330, 987, 360, 1017],
-    [292, 1025, 322, 1055],
-    [330, 1025, 360, 1055]
-  ]
-}
+item_slots_1080p = [
+  # Row 1
+  [93, 956, 142, 1005],
+  [149, 956, 198, 1005],
+  [205, 956, 254, 1005],
+  [261, 956, 310, 1005],
+  [318, 956, 366, 1005],
+  [373, 956, 422, 1005],
+  # Row 2
+  [93, 1012, 142, 1061],
+  [149, 1012, 198, 1061],
+  [205, 1012, 254, 1061],
+  [261, 1012, 310, 1061],
+  [318, 1012, 366, 1061],
+  [373, 1012, 422, 1061],
+]
 
 prefix = "data/clean_items/"
 
 def get_items(image, resolution, use_nn=False):
-  items = {
-    "orange": [],
-    "green": [],
-    "purple": [],
-    "flex": [],
-  }
+  items = []
     
-  for color, arr in item_slots_1080p.items():
-    for i, slot in enumerate(arr):
-      file_name = "output/slot-" + color + "-" + str(i) + ".png"
-      cropped_image = crop_item(image, resolution, slot, file_name)
-      
-      matched_item = None
-      if use_nn:
-        matched_item = match_item_nn(cropped_image)
-      else:
-        matched_item = match_item_hash(cropped_image)
+  for i, slot in enumerate(item_slots_1080p):
+    file_name = "output/" + str(i) + ".png"
+    cropped_image = crop_item(image, resolution, slot, file_name)
+    
+    matched_item = None
+    if use_nn:
+      matched_item = match_item_nn(cropped_image)
+    else:
+      matched_item = match_item_hash(cropped_image)
 
-      items[color].append(matched_item)
+    items.append(matched_item)
     
   return items
 

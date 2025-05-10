@@ -9,7 +9,7 @@ requires python 3.8
 
 
 ## Pulling more icon data
-`python src/item_puller.py`
+`python src/data_puller.py`
 
 Fetches item screenshots from the stream defined there, then pull up a window with a guess as to what the item is. Just hit enter if it looks right, or type the name if it's wrong. Data will be written to `data/training_data/[item_name]`
 
