@@ -10,7 +10,7 @@ f, axarr = plt.subplots(2, 1)
 axarr[0].imshow(Image.open("data/empty.png"))
 axarr[1].imshow(Image.open("data/empty.png"))
 
-frame, resolution = pull_frame("https://www.twitch.tv/mattercomm")
+frame, resolution = pull_frame("https://www.twitch.tv/terra__uwu")
 
 for i, slot in enumerate(item_slots_1080p):
   item_image = crop_item(frame, resolution, slot, "output/tmp.png")
@@ -18,10 +18,13 @@ for i, slot in enumerate(item_slots_1080p):
 
   axarr[0].imshow(item_image)
   axarr[1].imshow(Image.open("data/clean_items/" + item_name + ".png"))
-  item_name_fixed = input("Saving as '" + item_name + "', or enter the correct name (s to skip): ") or item_name
+  item_name_fixed = input("Saving as '" + item_name + "', or enter the correct name (s to skip, e to exit): ") or item_name
 
   if item_name_fixed == "skip" or item_name_fixed == "s":
     continue
+
+  if item_name_fixed == "e":
+    break
 
   # Find a filename that's 1 higher than the current highest
   folder = "data/training_data/" + item_name_fixed + "/"
