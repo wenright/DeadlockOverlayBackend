@@ -44,7 +44,7 @@ def get_items(image, resolution, use_nn=False):
 
 def crop_item(image, resolution, slot, file_name=None):
   scaled_crop_coordinates = scale_coordinates(slot, (1920, 1080), resolution)
-  cropped_image = image.crop(scaled_crop_coordinates).resize((30, 30))
+  cropped_image = image.crop(scaled_crop_coordinates).resize((49, 49))
 
   if __debug__ and file_name:
     cropped_image.save(file_name)
