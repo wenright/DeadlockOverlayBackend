@@ -18,8 +18,8 @@ def train(config, callbacks, saveModel=False):
   print("Number of images in data set: " + str(len(list(data_dir.glob("*/*.png")))))
 
   batch_size = 32
-  img_width = 30
-  img_height = 30
+  img_width = 49
+  img_height = 49
 
   train_ds = tf.keras.utils.image_dataset_from_directory(
     data_dir,
